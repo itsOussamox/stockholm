@@ -9,22 +9,40 @@ Do not use it with malicious intent.
 
 import sys
 from args import get_args
+from infection import get_infection_dir, get_target_files, get_encrypted_files
 
 
 def main():
     args = get_args()
 
-    # From here on, every print goes through this small helper
-    # so that --silent is respected everywhere without repeating the check.
     def log(message):
         if not args.silent:
             print(message)
 
+    try:
+        folder = get_infection_dir()
+    except FileNotFoundError as e:
+        print(e)
+        sys.exit(1)
+
     if args.reverse:
-        log(f"[~] Reverse mode activated. Key: {args.reverse}")
+        files = get_encrypted_files(folder)
+        if not files:
+            log("[!] No encrypted files found.")
+            return
+        log(f"[~] Reverse mode — {len(files)} file(s) to decrypt.")
+        for f in files:
+            log(f"    {f}")
         # TODO: decryption logic will go here
+
     else:
-        log("[~] Encryption mode activated.")
+        files = get_target_files(folder)
+        if not files:
+            log("[!] No eligible files found in ~/infection.")
+            return
+        log(f"[~] Encryption mode — {len(files)} file(s) to encrypt.")
+        for f in files:
+            log(f"    {f}")
         # TODO: encryption logic will go here
 
 
