@@ -1,15 +1,29 @@
-VENV    = .venv
-PYTHON  = $(VENV)/bin/python3
-PIP     = $(VENV)/bin/pip3
-MAIN    = src/stockholm.py
+VENV       = .venv
+PYTHON     = $(VENV)/bin/python3
+PIP        = $(VENV)/bin/pip3
+MAIN       = src/stockholm.py
+PY_VERSION = $(shell python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
 
-.PHONY: run install help version
+.PHONY: run install clean help version
 
-# Create the virtual environment and install dependencies
+# Install system venv package, create the virtual environment, install dependencies
 install:
-	@python3 -m venv $(VENV)
-	@$(PIP) install --quiet cryptography
-	@echo "Dependencies installed inside $(VENV)."
+	@if [ -d "$(VENV)" ]; then \
+		echo "[!] Virtual environment already exists. Run 'make clean' to reset it."; \
+	else \
+		echo "[*] Installing python$(PY_VERSION)-venv..."; \
+		sudo apt install -y python$(PY_VERSION)-venv; \
+		echo "[*] Creating virtual environment..."; \
+		python3 -m venv $(VENV); \
+		echo "[*] Installing dependencies..."; \
+		$(PIP) install --quiet cryptography; \
+		echo "[+] Done. Run 'make run' to start."; \
+	fi
+
+# Remove the virtual environment
+clean:
+	@rm -rf $(VENV)
+	@echo "[-] Virtual environment removed."
 
 # Run the program (silent — command itself won't be echoed)
 run: $(VENV)
