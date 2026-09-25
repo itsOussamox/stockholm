@@ -20,8 +20,9 @@ It mimics the file-targeting behavior of WannaCry — but safely, locally, and r
 
 - Python 3.x
 - The `cryptography` library
+- A Linux environment (VM or Docker recommended)
 
-Install dependencies with:
+Install everything with:
 ```bash
 make install
 ```
@@ -32,25 +33,40 @@ make install
 
 ```bash
 # Encrypt files in ~/infection
-python3 stockholm.py
+make run
 
 # Decrypt files using your key
-python3 stockholm.py -r YOUR_KEY_HERE
+make run ARGS="-r YOUR_KEY_HERE"
 
-# Run without any output
-python3 stockholm.py -s
+# Run silently (no output except the key)
+make run ARGS="-s"
 
 # Show help
-python3 stockholm.py -h
+make help
 
 # Show version
-python3 stockholm.py -v
+make version
 ```
+
+---
+
+## About the encryption key
+
+When you encrypt, the program always prints your key — even in silent mode.
+It looks like this:
+
+```
+[!] Your encryption key (save this now):
+    9f3a01c844bb72e10d56f391...
+```
+
+**Copy it somewhere safe immediately.** There is no way to recover your files without it.
+The key is a 64-character hex string (32 bytes / AES-256).
 
 ---
 
 ## Important
 
-- The program only touches files inside `~/infection` — nothing else
-- Your encryption key will be at least 16 characters long — keep it somewhere safe
-- Must be run in a Linux environment (VM or Docker recommended)
+- The program only touches files inside `~/infection` — nothing outside that folder
+- Files that are already `.ft` will never be encrypted twice
+- If you pass the wrong key with `-r`, decryption is safely refused — no data is lost
