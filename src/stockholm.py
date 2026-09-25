@@ -43,15 +43,15 @@ def main():
             return
 
         key = generate_key()
-        log(f"[~] Encryption mode — {len(files)} file(s) to encrypt.")
-        log(f"[!] Save this key — you will need it to decrypt your files:")
-        log(f"    {key}")
-        log("")
 
+        # Always print the key — even in silent mode.
+        # Without it the files cannot be decrypted, ever.
+        print(f"[!] Your encryption key (save this now):\n    {key}\n")
+
+        log(f"[~] Encryption mode — {len(files)} file(s) to encrypt.")
         for f in files:
             encrypt_file(f, key, log)
-
-        log("\n[+] Done.")
+        log("[+] Done.")
 
 
 if __name__ == "__main__":
