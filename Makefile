@@ -25,9 +25,14 @@ clean:
 	@rm -rf $(VENV)
 	@echo "[-] Virtual environment removed."
 
-# Run the program (silent — command itself won't be echoed)
+# Run the program — pass extra arguments with ARGS=
+# Examples:
+#   make run
+#   make run ARGS="-s"
+#   make run ARGS="-r YOUR_KEY_HERE"
+ARGS ?=
 run: $(VENV)
-	@$(PYTHON) $(MAIN)
+	@$(PYTHON) $(MAIN) $(ARGS)
 
 # Show the program's help
 help: $(VENV)
