@@ -6,24 +6,25 @@ Educational ransomware simulation — mimics WannaCry file targeting, safely and
 
 ---
 
-## Requirements
-
-- Python 3.x — Linux environment (VM or Docker recommended)
+## Docker (recommended)
 
 ```bash
-make install
+docker build -t stockholm .
+docker run --name stockholm -it stockholm 
+docker rm stockholm
+docker rmi stockholm
 ```
 
----
 
-## Usage
+## Local setup
+
+Requires Python 3.x on Linux.
 
 ```bash
-make run                       # Encrypt files in ~/infection
-make run ARGS="-r YOUR_KEY"    # Decrypt files using your key
-make run ARGS="-s"             # Silent — no output, key saved to file
-make help                      # Show all options
-make version                   # Show version
+make install                    # setup
+make run                        # encrypt
+make run ARGS="-r YOUR_KEY"     # decrypt
+make help                       # all options
 ```
 
 ---
@@ -31,11 +32,10 @@ make version                   # Show version
 ## The key
 
 Normal mode — key is printed to terminal, save it immediately.
-Silent mode — nothing is printed, key is saved to `~/infection/.stockholm_key`
+Silent mode — key is saved to `~/infection/.stockholm_key`
 
 Retrieve it with: `cat ~/infection/.stockholm_key`
 
-Without the key your files cannot be recovered.
 Key format: 64-character hex string (AES-256 / 32 bytes).
 
 ---
