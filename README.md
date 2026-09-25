@@ -19,29 +19,26 @@ make install
 ## Usage
 
 ```bash
-make run                        # Encrypt files in ~/infection
-make run ARGS="-r YOUR_KEY"     # Decrypt files using your key
-make run ARGS="-s"              # Silent mode (only the key is printed)
-make help                       # Show all options
-make version                    # Show version
+make run                       # Encrypt files in ~/infection
+make run ARGS="-r YOUR_KEY"    # Decrypt files using your key
+make run ARGS="-s"             # Silent — no output, key saved to file
+make help                      # Show all options
+make version                   # Show version
 ```
 
 ---
 
 ## The key
 
-When encrypting, the key is **always printed** — even in silent mode:
+Normal mode — key is printed to terminal, save it immediately.
+Silent mode — nothing is printed, key is saved to `~/infection/.stockholm_key`
 
-```
-[!] Your encryption key (save this now):
-    9f3a01c844bb72e10d56f391...
-```
+Retrieve it with: `cat ~/infection/.stockholm_key`
 
-Save it immediately. Without it your files cannot be recovered.
-It is a 64-character hex string (AES-256 / 32 bytes).
+Without the key your files cannot be recovered.
+Key format: 64-character hex string (AES-256 / 32 bytes).
 
 ---
-
 
 ## Notes
 

